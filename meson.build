@@ -37,11 +37,21 @@ libelsa = library(
     install: true
 )
 
-run_command('pkg-config', '--cflags','--libs','gtk+-3.0' ,check:true).stdout().strip().split(' ')
-fdeps += dependency('gtk+-3.0')
+# command line interface
 executable(
      'elsa',
      'src/cli/main.vala',
+     dependencies: fdeps,    
+     link_with: libelsa,
+     link_args: links,
+)
+
+# gtk test stuff. remove later
+links += run_command('pkg-config', '--cflags','--libs','gtk+-3.0' ,check:true).stdout().strip().split(' ')
+fdeps += dependency('gtk+-3.0')
+executable(
+     'elsa-test',
+     'src/test/gtk.vala',
      dependencies: fdeps,    
      link_with: libelsa,
      link_args: links,
