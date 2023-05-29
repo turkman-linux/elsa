@@ -1,3 +1,4 @@
+public extern int system(string cmd);
 int main(string[] args){
     // create window and test gtk widgets
     Gtk.init(ref args);
@@ -16,7 +17,11 @@ int main(string[] args){
     });
     // create test module
     elsa.module m = new elsa.module("hello-world");
+    e.done.connect(()=>{
+        stderr.printf("done\n");
+    });
     m.main.connect(()=>{
+        system("sleep 3");
         m.update(0,"hello world\n",false);
         return 0;
     });

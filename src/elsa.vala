@@ -1,8 +1,9 @@
-namespace elsa{
+namespace elsa {
     public class elsa{
         private module[] modules;
         private string[] errors;
         public signal void update(int percent, string line, bool pulse);
+        public signal void done(int status);
         public void add_module(module m){
             if(modules == null){
                 modules = {};
@@ -21,17 +22,24 @@ namespace elsa{
             }
             errors += msg;
         }
-        public int run(){
-             GLib.MainLoop loop = new GLib.MainLoop();
-             GLib.Idle.add(()=>{
-                 foreach(module m in modules){
-                     m.run();
-                 }
-                 loop.quit();
-                 return false;
-            });
-            loop.run();
-            return 0;
+        private bool operation_started = false;
+        private void run_operation(){
+            if(operation_started){
+                return;
+            }
+            operation_started = true;
+            int status = 0;
+            foreach(module m in modules){
+                status = m.run();
+                if(status != 0){
+                    done(status);
+                }
+            }
+            done(0);
+            operation_started = false;
+        }
+        public void run(){
+            new Thread<void> ("run", run_operation);
         }
     }
 }
