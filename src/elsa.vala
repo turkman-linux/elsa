@@ -20,6 +20,15 @@ namespace elsa {
                 }
             }
         }
+        public string get_value(string module, string name){
+            foreach(module m in modules){
+                if (m.name == module){
+                    return m.get_value(name);
+                }
+            }
+            return "";
+        }
+        
         public bool has_error(){
             return errors.length != 0;
         }
