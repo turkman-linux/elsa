@@ -3,6 +3,6 @@ build: clean
 	ninja -C build
 
 run: clean build
-	./build/elsa
+	./build/elsa-test
 clean:
 	rm -rf build

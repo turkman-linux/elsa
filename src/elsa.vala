@@ -13,6 +13,13 @@ namespace elsa {
             });
             modules += m;
         }
+        public void set_value(string module, string name, string value){
+            foreach(module m in modules){
+                if (m.name == module){
+                    m.set_value(name,value);
+                }
+            }
+        }
         public bool has_error(){
             return errors.length != 0;
         }

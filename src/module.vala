@@ -3,7 +3,7 @@ namespace elsa {
         private config[] cfg;
         public signal int init();
         public signal int main();
-        private string name;
+        public string name;
         public bool enabled = true;
         public signal void update(int percent, string line, bool pulse);
         public module(string n){
