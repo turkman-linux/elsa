@@ -3,6 +3,7 @@ namespace elsa {
         private config[] cfg;
         public signal int init();
         public signal int main();
+        private string[] dependency;
         public string name;
         public bool enabled = true;
         public signal void update(int percent, string line, bool pulse);
@@ -18,6 +19,12 @@ namespace elsa {
                 return main();
             }
             return 0;
+        }
+        public void set_deps(string[] deps){
+            dependency = deps;
+        }
+        public string[] get_deps(){
+            return dependency;
         }
         public void set_value(string name, string value){
              foreach(config c in cfg){
