@@ -11,7 +11,8 @@ int main(string[] args){
         loop.quit();
     });
     // create test module
-    var m = new elsa.module("hello-world");
+    var m = new elsa.module();
+    m.name = "hello-world";
     m.main.connect(()=>{
         e.do_update(0,"hello world\n",false);
         return 0;

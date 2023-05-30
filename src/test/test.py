@@ -10,7 +10,7 @@ e = elsa.engine()
 def update(engine, percent, line, pulse):
     print(line)
 def done(engine, status):
-    loop.quit()
+    exit(0)
 e.connect("update",update)
 e.connect("done",done)
 
@@ -19,7 +19,15 @@ def main(engine):
     engine.do_update(0,"hello world",False)
     return 0
 m = elsa.module()
+m.name = "hello-world"
 m.connect("main",main)
+
+# mount module test
+mount = elsa.module_mount()
+mount.init()
+print(mount.name)
+e.add_module(mount)
+mount.add_mount("/dev/sda","/")
 
 # add elsa module
 e.add_module(m)

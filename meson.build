@@ -7,7 +7,9 @@ project(
 sources = [
      'src/elsa.vala',
      'src/module.vala',
+     'src/debug.vala',
      'src/config.vala',
+     'src/modules/mount.vala'
 ]
 
 # dependencies
@@ -16,6 +18,11 @@ deps = [
     'gio-2.0',
     'gobject-2.0',
 ]
+
+# debug option
+if get_option('debug')
+    add_global_arguments('-D','DEBUG',language: 'vala')
+endif
 
 # calculate links
 links = []

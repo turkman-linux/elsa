@@ -7,8 +7,7 @@ namespace elsa {
         public string name;
         public bool enabled = true;
         public signal void update(int percent, string line, bool pulse);
-        public module(string n){
-           name = n;
+        public module(){
            cfg = {};
         }
         public void do_update(int percent, string line, bool pulse){

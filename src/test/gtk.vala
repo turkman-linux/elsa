@@ -19,7 +19,8 @@ int main(string[] args){
         stderr.printf("done\n");
     });
     // create test module
-    var m = new elsa.module("hello-world");
+    var m = new elsa.module();
+    m.name = "hello-world";
     m.main.connect(()=>{
         system("sleep 3");
         e.do_update(0,m.get_value("text"),false);

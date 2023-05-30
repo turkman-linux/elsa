@@ -13,6 +13,9 @@ namespace elsa {
             if(modules == null){
                 modules = {};
             }
+            if(m.name == "" || m.name == null){
+                return;
+            }
             m.update.connect((a, b, c)=>{
                  update(a, b, c);
             });
@@ -79,14 +82,14 @@ namespace elsa {
         // module order resolver
         private module get_module(string name){
             if(name == null){
-                return new module("");
+                return new module();
             }
             foreach(module m in modules){
                 if(m.name == name){
                     return m;
                 }
             }
-            return new module(name);
+            return new module();
         }
         private string[] module_order;
         private string[] module_cache;
