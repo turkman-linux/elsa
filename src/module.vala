@@ -1,5 +1,5 @@
 namespace elsa {
-    public class module {
+    public class module : GLib.Object {
         private config[] cfg;
         public signal int init();
         public signal int main();
@@ -9,6 +9,9 @@ namespace elsa {
         public module(string n){
            name = n;
            cfg = {};
+        }
+        public void do_update(int percent, string line, bool pulse){
+            update(percent, line, pulse);
         }
         public int run(){
             if(enabled){

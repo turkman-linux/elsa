@@ -8,7 +8,7 @@ int main(string[] args){
     w.show_all();
 
     // create elsa engine
-    elsa.elsa e = new elsa.elsa();
+    elsa.engine e = new elsa.engine();
     // connect elsa engine with gtk
     int i=0;
     e.update.connect((percent, line, pulse)=>{

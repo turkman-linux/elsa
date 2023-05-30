@@ -37,6 +37,20 @@ libelsa = library(
     install: true
 )
 
+# gobject-introspection
+g_ir_compiler = find_program('g-ir-compiler')
+custom_target('typelib',
+              command: [
+                  g_ir_compiler,
+                  '--shared-library', libelsa.full_path(),
+                  '--output', '@OUTPUT@',
+                  join_paths(meson.current_build_dir(), 'elsa-'+meson.project_version()+'.gir')
+              ],
+              output: 'elsa-'+meson.project_version()+'.typelib',
+              depends: libelsa,
+              install: true,
+              install_dir: join_paths(get_option('libdir'), 'girepository-1.0'))
+
 # command line interface
 executable(
      'elsa',

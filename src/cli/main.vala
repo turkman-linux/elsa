@@ -2,7 +2,7 @@ public extern int system(string cmd);
 int main(string[] args){
     var loop = new GLib.MainLoop();
     // create elsa engine
-    elsa.elsa e = new elsa.elsa();
+    elsa.engine e = new elsa.engine();
     // connect update signal
     e.update.connect((percent, line, pulse)=>{
         stdout.printf(line);

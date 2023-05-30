@@ -1,9 +1,13 @@
 namespace elsa {
-    public class elsa{
+    public class engine : GLib.Object{
         private module[] modules;
         private string[] errors;
         public signal void update(int percent, string line, bool pulse);
         public signal void done(int status);
+
+        public void do_update(int percent, string line, bool pulse){
+            update(percent, line, pulse);
+        }
         public void add_module(module m){
             if(modules == null){
                 modules = {};
