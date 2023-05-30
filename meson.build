@@ -8,6 +8,7 @@ sources = [
      'src/elsa.vala',
      'src/module.vala',
      'src/debug.vala',
+     'src/util.vala',
      'src/config.vala',
      'src/modules/mount.vala'
 ]
