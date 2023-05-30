@@ -13,7 +13,7 @@ int main(string[] args){
     // create test module
     var m = new elsa.module("hello-world");
     m.main.connect(()=>{
-        m.update(0,"hello world\n",false);
+        e.do_update(0,"hello world\n",false);
         return 0;
     });
     // add elsa module

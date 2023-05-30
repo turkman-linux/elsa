@@ -22,7 +22,7 @@ int main(string[] args){
     var m = new elsa.module("hello-world");
     m.main.connect(()=>{
         system("sleep 3");
-        m.update(0,m.get_value("text"),false);
+        e.do_update(0,m.get_value("text"),false);
         return 0;
     });
     // add elsa module
