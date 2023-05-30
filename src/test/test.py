@@ -27,7 +27,8 @@ mount = elsa.module_mount()
 mount.init()
 print(mount.name)
 e.add_module(mount)
-mount.add_mount("/dev/sda","/")
+mount.add_mount("/dev/sda1","/boot/efi")
+mount.add_mount("/dev/sda2","/")
 
 # add elsa module
 e.add_module(m)

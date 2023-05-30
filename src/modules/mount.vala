@@ -17,10 +17,27 @@ namespace elsa {
             obj += o;
         }
         private int mount_main(){
+            sort();
             foreach(mount_object o in obj){
-                stdout.printf("%s %s",o.disk, o.target);
+                stdout.printf("%s %s\n",o.disk, o.target);
             }
             return 0;
+        }
+        private void sort(){
+            mount_object[] nobj = {};
+            int cur = 0;
+            while(true){
+                foreach(mount_object o in obj){
+                    if(o.target.length == cur){
+                        nobj += o;
+                    }
+                }
+                cur += 1;
+                if(nobj.length == obj.length){
+                    obj = nobj;
+                    return;
+                }
+            }
         }
     }
 }

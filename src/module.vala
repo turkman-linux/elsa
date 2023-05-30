@@ -1,7 +1,6 @@
 namespace elsa {
     public class module : GLib.Object {
         private config[] cfg;
-        public signal int init();
         public signal int main();
         private string[] dependency;
         public string name;
