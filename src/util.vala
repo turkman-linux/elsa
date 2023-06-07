@@ -17,7 +17,7 @@ namespace elsa {
     }
     public string readfile(string path){
         File file = File.new_for_path (path);
-	try {
+    try {
             FileInputStream @is = file.read ();
             DataInputStream dis = new DataInputStream (@is);
             string data="";
@@ -31,4 +31,25 @@ namespace elsa {
         }
         return "";
     }
+
+    public int run_args(string[] args) {
+        try {
+            string[] spawn_env = Environ.get ();
+            int status;
+            Process.spawn_sync ("/",
+                                args,
+                                spawn_env,
+                                SpawnFlags.SEARCH_PATH,
+                                null,
+                                null,
+                                null,
+                                out status);
+
+            return status;
+        } catch (SpawnError e) {
+            print ("Error: %s\n", e.message);
+        }
+        return 1;
+    }
 }
+

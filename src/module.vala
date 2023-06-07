@@ -5,6 +5,7 @@ namespace elsa {
         private string[] dependency;
         public string name;
         public bool enabled = true;
+        public engine elsa;
         public signal void update(int percent, string line, bool pulse);
         public module(){
            cfg = {};
@@ -44,6 +45,9 @@ namespace elsa {
                 }
             }
             return "";
+        }
+        public void set_engine(engine e){
+            elsa = e;
         }
     }
 }

@@ -2,6 +2,10 @@ namespace elsa {
     private class mount_object {
         public string disk;
         public string target;
+        public string options;
+        public mount_object(){
+            options = "defaults,rw";
+        }
     }
     public class module_mount : module {
         private mount_object[] obj;
@@ -19,7 +23,11 @@ namespace elsa {
         private int mount_main(){
             sort();
             foreach(mount_object o in obj){
-                stdout.printf("%s %s\n",o.disk, o.target);
+                int status = run_args({"mount", o.disk, o.target, "-o", o.options});
+                if(status != 0){
+                    elsa.add_error("Failed to mount filesystem: %s -> %s".printf(o.disk, o.target));
+                    return status;
+                }
             }
             return 0;
         }

@@ -3,10 +3,14 @@ namespace elsa {
         private module[] modules;
         private string[] errors;
         public signal void update(int percent, string line, bool pulse);
+        public signal void error(string line, bool fatal);
         public signal void done(int status);
 
         public void do_update(int percent, string line, bool pulse){
             update(percent, line, pulse);
+        }
+        public void do_error(string line, bool fatal){
+            error(line, fatal);
         }
         // module insert
         public void add_module(module m){
@@ -19,7 +23,7 @@ namespace elsa {
             m.update.connect((a, b, c)=>{
                  update(a, b, c);
             });
-            
+            m.set_engine(this);
             debug("Module register: "+m.name);
             modules += m;
         }
@@ -71,6 +75,11 @@ namespace elsa {
                 status = m.run();
                 if(status != 0){
                     done(status);
+                }
+            }
+            if(has_error()){
+                foreach(string err in errors){
+                    do_error(err,true);
                 }
             }
             done(0);

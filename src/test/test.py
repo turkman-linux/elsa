@@ -9,9 +9,12 @@ e = elsa.engine()
 # connect update signal
 def update(engine, percent, line, pulse):
     print(line)
+def error(engine, line, fatal):
+    print(line)
 def done(engine, status):
     exit(0)
 e.connect("update",update)
+e.connect("error",error)
 e.connect("done",done)
 
 # create test module
