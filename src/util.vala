@@ -17,7 +17,7 @@ namespace elsa {
     }
     public string readfile(string path){
         File file = File.new_for_path (path);
-    try {
+        try {
             FileInputStream @is = file.read ();
             DataInputStream dis = new DataInputStream (@is);
             string data="";
@@ -31,6 +31,14 @@ namespace elsa {
         }
         return "";
     }
-
+    public string[] ssplit(string data, string c){
+        string[] ret = {};
+        foreach(string item in data.split(c)){
+            if(item.length > 0){
+                ret += item;
+            }
+        }
+        return ret;
+    }
 }
 

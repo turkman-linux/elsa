@@ -8,10 +8,10 @@ namespace elsa {
 	        done();
                 return false;
 	    }
-
             try {
                 string line;
                 channel.read_line (out line, null, null);
+                stdout.printf(line);
                 do_update(line);
             } catch (IOChannelError e) {
                 print ("%s: IOChannelError: %s\n", stream_name, e.message);

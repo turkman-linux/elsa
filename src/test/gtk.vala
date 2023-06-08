@@ -22,13 +22,21 @@ int main(string[] args){
     var m = new elsa.module();
     m.name = "hello-world";
     m.main.connect(()=>{
-        system("sleep 3");
+        //system("sleep 3");
         e.do_update(0,m.get_value("text"),false);
         return 0;
     });
     // add elsa module
     e.add_module(m);
     e.set_value("hello-world","text","Hello World\n");
+    
+    // rsync module
+    var rsync = new elsa.module_rsync();
+    rsync.name = "rsync";
+    rsync.init();
+    rsync.set_source("/tmp/aa");
+    rsync.set_target("/tmp/bb");
+    e.add_module(rsync);
     // connect signal
     l.clicked.connect((w)=>{
         e.run();
