@@ -33,6 +33,10 @@ int main(string[] args){
     l.clicked.connect((w)=>{
         e.run();
     });
+    e.cmd.done.connect(()=>{
+        stdout.printf("DONE\n");
+    });
+    e.cmd.run_and_update({"uname","-a"});
     Gtk.main();
     return 0;
 }

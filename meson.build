@@ -10,6 +10,7 @@ sources = [
      'src/debug.vala',
      'src/util.vala',
      'src/config.vala',
+     'src/command.vala',
      'src/modules/mount.vala'
 ]
 

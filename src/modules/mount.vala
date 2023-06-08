@@ -23,7 +23,7 @@ namespace elsa {
         private int mount_main(){
             sort();
             foreach(mount_object o in obj){
-                int status = run_args({"mount", o.disk, o.target, "-o", o.options});
+                int status = elsa.cmd.run_args({"mount", o.disk, o.target, "-o", o.options});
                 if(status != 0){
                     elsa.add_error("Failed to mount filesystem: %s -> %s".printf(o.disk, o.target));
                     return status;

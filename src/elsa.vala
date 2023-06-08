@@ -2,6 +2,7 @@ namespace elsa {
     public class engine : GLib.Object{
         private module[] modules;
         private string[] errors;
+        public command cmd;
         public signal void update(int percent, string line, bool pulse);
         public signal void error(string line, bool fatal);
         public signal void done(int status);
@@ -16,6 +17,16 @@ namespace elsa {
         public void add_module(module m){
             if(modules == null){
                 modules = {};
+            }
+            if(cmd == null){
+                cmd = new command();
+                cmd.update.connect((line)=>{
+                    do_update(0,line,true);
+                });
+                cmd.done.connect(()=>{
+                    debug("Command done");
+                });
+                
             }
             if(m.name == "" || m.name == null){
                 return;

@@ -24,6 +24,13 @@ def main(engine):
 m = elsa.module()
 m.name = "hello-world"
 m.connect("main",main)
+# add elsa module
+e.add_module(m)
+
+# command test
+e.cmd.run_args(["uname","-m"]);
+e.cmd.run_and_update(["uname","-m"]);
+e.cmd.getoutput(["uname","-m"]);
 
 # mount module test
 mount = elsa.module_mount()
@@ -33,7 +40,5 @@ e.add_module(mount)
 mount.add_mount("/dev/sda1","/boot/efi")
 mount.add_mount("/dev/sda2","/")
 
-# add elsa module
-e.add_module(m)
 e.run()
 loop.run()
