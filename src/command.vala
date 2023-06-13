@@ -2,6 +2,7 @@ namespace elsa {
 
     public class command : GLib.Object{
     public signal void update(string output);
+    private bool running = false;
     public signal void done();
     private bool process_line (IOChannel channel, IOCondition condition, string stream_name) {
 	    if (condition == IOCondition.HUP) {
@@ -27,6 +28,7 @@ namespace elsa {
         }
 
         public void run_and_update(string[] args){
+            running = true;
             Pid child_pid;
             int standard_input;
             int standard_output;
@@ -55,10 +57,15 @@ namespace elsa {
             GLib.ChildWatch.add (child_pid, (pid, status) => {
                 GLib.Process.close_pid (pid);
                 done();
+                running = false;
             });
             } catch (SpawnError e) {
                 print ("Error: %s\n", e.message);
-            }       
+                running = false;
+            }
+            while(running){
+                GLib.Thread.usleep(10);
+            }
         }
         public int run_args(string[] args) {
             try {

@@ -57,15 +57,7 @@ namespace elsa {
             }
             rsync_cmd += source+"/";
             rsync_cmd += target+"/";
-            bool finish = false;
-            cmd.done.connect(()=>{
-                finish=true;
-            });
-
             cmd.run_and_update(rsync_cmd);
-            while(!finish){
-                GLib.Thread.usleep(200);
-            }
             return 0;
         }
     }

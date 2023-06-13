@@ -10,10 +10,15 @@ int main(string[] args){
     e.done.connect(()=>{
         loop.quit();
     });
+    e.cmd = new elsa.command();
+    e.cmd.update.connect((line)=>{
+        e.do_update(0,line,false);
+    });
     // create test module
     var m = new elsa.module();
     m.name = "hello-world";
     m.main.connect(()=>{
+        e.cmd.run_and_update({"ls","/"});
         e.do_update(0,"hello world\n",false);
         return 0;
     });
