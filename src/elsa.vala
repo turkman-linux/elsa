@@ -32,7 +32,7 @@ namespace elsa {
                 return;
             }
             m.update.connect((a, b, c)=>{
-                 update(a, b, c);
+                 do_update(a, b, c);
             });
             m.set_engine(this);
             debug("Module register: "+m.name);

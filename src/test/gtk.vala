@@ -10,10 +10,8 @@ int main(string[] args){
     // create elsa engine
     elsa.engine e = new elsa.engine();
     // connect elsa engine with gtk
-    int i=0;
     e.update.connect((percent, line, pulse)=>{
-        l.set_label(line+i.to_string());
-        i+=1;
+        stdout.printf("%d %s\n", percent, line);
     });
     e.done.connect(()=>{
         stderr.printf("done\n");

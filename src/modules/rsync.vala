@@ -19,8 +19,12 @@ namespace elsa {
     
         private long get_inode_size(string path){
             string dfout = elsa.cmd.getoutput({"df","--inodes", path});
-            stdout.printf("%s\n",ssplit(dfout," ")[2]);
-            return long.parse(ssplit(dfout," ")[2]);
+            if(dfout.length <=0 ){
+                return 0;
+            }
+            string line = ssplit(dfout,"\n")[1];
+            string inode = ssplit(line," ")[2];
+            return long.parse(inode);
         }
         
         public int rsync_main(){
@@ -28,7 +32,11 @@ namespace elsa {
             long current = 0;
             long total = get_inode_size("/%s".printf(source));
             cmd.update.connect((line)=>{
-                int percent = (int)(100*current/total);
+                int percent = 0;
+                if(total <=0){
+                    percent = (int)(100*current/total);
+                }
+                stdout.printf("%d %s\n", percent, line);
                 elsa.do_update(percent,line,false);
                 current += 1;
             });
@@ -46,15 +54,13 @@ namespace elsa {
             foreach(string e in excludes){
                 rsync_cmd += "--exclude="+e;
             }
-            rsync_cmd += source+"/*";
+            rsync_cmd += source+"/";
             rsync_cmd += target+"/";
             bool finish = false;
             cmd.done.connect(()=>{
                 finish=true;
             });
-            foreach(string e in rsync_cmd){
-                stdout.printf("%s\n",e);
-            }
+
             cmd.run_and_update(rsync_cmd);
             while(!finish){
                 GLib.Thread.usleep(200);
