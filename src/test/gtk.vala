@@ -43,7 +43,6 @@ int main(string[] args){
     e.cmd.done.connect(()=>{
         stdout.printf("DONE\n");
     });
-    e.cmd.run_and_update({"uname","-a"});
     Gtk.main();
     return 0;
 }

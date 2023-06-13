@@ -94,7 +94,6 @@ namespace elsa {
                 }
             }
             done(0);
-            operation_started = false;
         }
         public void run(){
             new Thread<void> ("run", run_operation);
