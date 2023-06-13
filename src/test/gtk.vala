@@ -12,6 +12,7 @@ int main(string[] args){
     // connect elsa engine with gtk
     e.update.connect((percent, line, pulse)=>{
         stdout.printf("%d %s\n", percent, line);
+        l.set_label("%s".printf(line));
     });
     e.done.connect(()=>{
         stderr.printf("done\n");
@@ -32,12 +33,12 @@ int main(string[] args){
     var rsync = new elsa.module_rsync();
     rsync.name = "rsync";
     rsync.init();
-    rsync.set_source("/tmp/aa");
-    rsync.set_target("/tmp/bb");
+    rsync.set_source("/mnt");
+    rsync.set_target("/home/a/test");
     e.add_module(rsync);
     // connect signal
     l.clicked.connect((w)=>{
-        e.run();
+        GLib.Idle.add((GLib.SourceFunc)e.run);
     });
     e.cmd.done.connect(()=>{
         stdout.printf("DONE\n");

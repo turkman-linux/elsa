@@ -24,6 +24,7 @@ namespace elsa {
             }
             string line = ssplit(dfout,"\n")[1];
             string inode = ssplit(line," ")[2];
+            stderr.printf(inode);
             return long.parse(inode);
         }
         
@@ -33,10 +34,10 @@ namespace elsa {
             long total = get_inode_size("/%s".printf(source));
             cmd.update.connect((line)=>{
                 int percent = 0;
-                if(total <=0){
+                if(total >0){
                     percent = (int)(100*current/total);
                 }
-                stdout.printf("%d %s\n", percent, line);
+                stdout.printf("%d %f %s\n", percent, total, line);
                 elsa.do_update(percent,line,false);
                 current += 1;
             });

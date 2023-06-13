@@ -19,6 +19,8 @@ namespace elsa {
             } catch (ConvertError e) {
                 print ("%s: ConvertError: %s\n", stream_name, e.message);
                 return false;
+            }catch{
+                return false;
             }
             return true;
         }
@@ -55,9 +57,9 @@ namespace elsa {
                 error.add_watch (GLib.IOCondition.IN | GLib.IOCondition.HUP, (channel, condition) => {
                 return process_line (channel, condition, "stderr");
             });
-
             GLib.ChildWatch.add (child_pid, (pid, status) => {
                 GLib.Process.close_pid (pid);
+                done();
             });
         }
         public int run_args(string[] args) {
