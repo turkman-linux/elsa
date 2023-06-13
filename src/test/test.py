@@ -28,6 +28,9 @@ m.connect("main",main)
 e.add_module(m)
 
 # command test
+def uuu(c,msg):
+    print(msg)
+e.cmd.connect("update",uuu)
 e.cmd.run_args(["uname","-m"]);
 e.cmd.run_and_update(["uname","-m"]);
 e.cmd.getoutput(["uname","-m"]);

@@ -1,6 +1,6 @@
 namespace elsa {
 
-    public class command {
+    public class command : GLib.Object{
     public signal void update(string output);
     public signal void done();
     private bool process_line (IOChannel channel, IOCondition condition, string stream_name) {
@@ -18,8 +18,6 @@ namespace elsa {
                 return false;
             } catch (ConvertError e) {
                 print ("%s: ConvertError: %s\n", stream_name, e.message);
-                return false;
-            }catch{
                 return false;
             }
             return true;
@@ -44,9 +42,6 @@ namespace elsa {
                     out standard_input,
                     out standard_output,
                     out standard_error);
-            } catch (SpawnError e) {
-                print ("Error: %s\n", e.message);
-            }       
             // stdout
             GLib.IOChannel output = new GLib.IOChannel.unix_new (standard_output);
             output.add_watch (GLib.IOCondition.IN | GLib.IOCondition.HUP, (channel, condition) => {
@@ -61,6 +56,9 @@ namespace elsa {
                 GLib.Process.close_pid (pid);
                 done();
             });
+            } catch (SpawnError e) {
+                print ("Error: %s\n", e.message);
+            }       
         }
         public int run_args(string[] args) {
             try {

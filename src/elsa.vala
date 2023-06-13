@@ -8,12 +8,7 @@ namespace elsa {
         public signal void done(int status);
 
         public void do_update(int percent, string line, bool pulse){
-            try{
-                update(percent, line, pulse);
-            }catch{
-
-            }
-
+            update(percent, line, pulse);
         }
         public void do_error(string line, bool fatal){
             error(line, fatal);
