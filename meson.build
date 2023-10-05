@@ -8,7 +8,8 @@ sources = [
      'src/command.vala',
      'src/config.vala',
      'src/util.vala',
-     'src/modules/rsync.vala'
+     'src/modules/rsync.vala',
+     'src/modules/mount.vala'
 ]
 
 # dependencies
