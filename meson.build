@@ -4,20 +4,15 @@ project(
   version : '1.0'
 )
 # sources
-sources = [
-     'src/command.vala',
-     'src/config.vala',
-     'src/util.vala',
-     'src/modules/rsync.vala',
-     'src/modules/mount.vala'
-]
-
+sources = run_command('find', 'src','-type','f',check:true).stdout().strip().split('\n')
 # dependencies
 deps = [
     'glib-2.0',
     'gio-2.0',
     'gobject-2.0',
 ]
+
+run_command('bash', './tool/mkctx.sh', check:true)
 
 # debug option
 if get_option('debug')
@@ -46,7 +41,7 @@ libelsa = library(
 # command line interface
 executable(
      'elsa',
-     'src/main.vala',
+     'cli/main.vala',
      dependencies: fdeps,    
      link_with: libelsa,
      link_args: links,

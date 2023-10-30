@@ -7,5 +7,6 @@ install:
 
 run: clean build
 	./build/elsa-test
+
 clean:
-	rm -rf build
+	rm -rf build src/ctx.vala

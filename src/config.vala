@@ -38,4 +38,26 @@ public string get_value(string section, string name, string default){
     return default;
 }
 
+public bool get_bool(string section, string name, bool default){
+    return get_value(section, name, default.to_string()) == "true";
+}
 
+public string[] get_value_list(string section){
+    string[] ret = {};
+    foreach(config c in cfg){
+        if(c.section == section){
+            ret += c.name;
+        }
+    }
+    return ret;
+}
+
+public string[] get_section_list(){
+    string[] ret = {};
+    foreach(config c in cfg){
+        if(!(c.section in ret)){
+            ret += c.section;
+        }
+    }
+    return ret;
+}
