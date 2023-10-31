@@ -1,4 +1,6 @@
 int main(string[] args){
-    load_config("/etc/debian.conf");
+    ctx_init();
+    load_config("test.conf");
+    run_module("mount", args);
     return 0;
 }

@@ -13,6 +13,7 @@ deps = [
 ]
 
 run_command('bash', './tool/mkctx.sh', check:true)
+sources += ['src/ctx.vala']
 
 # debug option
 if get_option('debug')
