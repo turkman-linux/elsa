@@ -1,0 +1,6 @@
+# Elsa installer
+Simple and module installation tool
+## build:
+```
+make
+```
