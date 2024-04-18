@@ -1,5 +1,6 @@
 #ifndef MODULE_PATH
 #define MODULE_PATH "/lib/elsa/"
+#define CONFIG_FILE "/etc/elsa.conf"
 #endif
 #ifndef PATH_MAX
 #define PATH_MAX 1024

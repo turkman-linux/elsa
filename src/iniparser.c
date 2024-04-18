@@ -13,8 +13,6 @@
 
 //header
 int status = 0;
-static char ** strsplit(const char * s, const char * delim);
-static int strcount(char * buf, char * c);
 static int iseq(char * str1, char * str2);
 
 char * ini_get_area(char * ctx, char * name) {
@@ -136,7 +134,7 @@ static int iseq(char * str1, char * str2) {
 }
 
 //util functions
-static int strcount(char * buf, char * c) {
+int strcount(char * buf, char * c) {
     int size = 1;
     for (int i = 0; i <= strlen(buf); i++) {
         if (buf[i] == c[0]) {
@@ -145,7 +143,7 @@ static int strcount(char * buf, char * c) {
     }
     return size;
 }
-static char ** strsplit(const char * s,
+char ** strsplit(const char * s,
     const char * delim) {
     void * data;
     char * _s = (char * ) s;
@@ -239,3 +237,4 @@ char * readlines(const char * filename) {
         return f_data;
     }
 }
+

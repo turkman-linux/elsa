@@ -7,5 +7,5 @@ void aaa(char* msg){
 
 int main(){
     set_update_function(aaa);
-    module_execute("main");
+    return module_execute("main");
 }

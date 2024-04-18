@@ -5,6 +5,7 @@
 
 #include <module.h>
 #include <environ.h>
+#include <iniparser.h>
 
 
 static update_fn update;
@@ -13,10 +14,34 @@ void set_update_function(update_fn up_new){
 }
 
 static bool is_available_module(char* name);
+static int module_invoke(char* name);
+static void module_init();
 static int execute_piped(char* cmd);
 static char* module_path;
+static char* config;
 
 int module_execute(char* name){
+    module_init();
+    if(!name || strlen(name) == 0){
+        return 0;
+    }
+    if(!is_available_module(name)){
+        return 2;
+    }
+
+    char* area = ini_get_area(config, name);
+    char* fdeps = ini_get_value(area, "dependencies");
+    char** deps = strsplit(fdeps, " ");
+    for(int i=0;i<strcount(fdeps, " ");i++){
+        int status = module_execute(deps[i]);
+        if(status){
+            return status;
+        }
+    }
+    module_invoke(name);
+}
+
+static void module_init(){
     if(!update){
         update = (update_fn) puts;
     }
@@ -28,17 +53,25 @@ int module_execute(char* name){
             module_path = MODULE_PATH;
         }
     }
-    if(!is_available_module(name)){
-        return 2;
+    if(!config){
+        if(getenv("ELSA_CONFIG")){
+            config = readlines(getenv("ELSA_CONFIG"));
+        } else {
+            config = readlines(CONFIG_FILE);
+        }
     }
-    clear_env();
+}
+
+static int module_invoke(char* name){
     printf("Executing module => %s\n", name);
+    char** envs = save_env();
+    clear_env();
     char module[PATH_MAX];
     strcpy(module, module_path);
     strcat(module, name);
-    return execute_piped(module);
+    int status = execute_piped(module);
+    restore_env(envs);
 }
-
 
 
 static int l;

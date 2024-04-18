@@ -8,7 +8,7 @@ build: clean libelsa cli
 
 %.o: %.c
 	install -d $(shell dirname build/$@)
-	$(CC) -c -fPIC -o build/$@ $< -Iinclude
+	$(CC) -c -fPIC -o build/$@ $< -Iinclude -g3
 
 libelsa: $(ELSA_OBJS)
 	cd build ; $(CC) $(ELSA_OBJS) -o libelsa.so -shared -fPIC $(CFLAGS) -nostdlib -lc
@@ -20,3 +20,9 @@ cli: libelsa $(CLI_OBJS)
 
 clean:
 	rm -rf build
+
+test: build
+	env LD_LIBRARY_PATH=$$PWD/build \
+	    ELSA_CONFIG=example/elsa.conf \
+	    ELSA_MODULES=example/ \
+	    $(gdb) ./build/test
