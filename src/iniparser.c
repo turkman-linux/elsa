@@ -93,6 +93,36 @@ char** ini_get_value_names(char* ctx, int* len) {
     }
     *len -= skip;
     ret[*len] = NULL;
+    ret = realloc(ret, (*len+1)*sizeof(char*));
+    return ret;
+}
+
+char** ini_get_section_names(char* ctx, int* len) {
+    int l = strcount(ctx, "\n");
+    char ** lines = strsplit(ctx, "\n");
+    *len=0;
+    char** ret = malloc(l*sizeof(char*));
+    for(int i=0;i<l;i++){
+        if(!lines[i] || strlen(lines[i]) == 0){
+            continue;
+        }
+        if(lines[i][0] == '['){
+            int ll = strlen(lines[i]);
+            while(ll>1){
+                if(lines[i][ll-1] == ' ' || lines[i][ll-1] == ']'){
+                    lines[i][ll-1]='\0';
+                    ll--;
+                } else {
+                    break;
+                }
+            }
+            ret[*len] = strdup(lines[i]);
+            ret[*len] +=1;
+            *len+=1;
+        }
+        ret[*len] = NULL;
+    }
+    ret = realloc(ret, (*len+1)*sizeof(char*));
     return ret;
 }
 
