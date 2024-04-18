@@ -5,4 +5,8 @@
 #define PATH_MAX 1024
 #endif
 
+
+typedef void (*update_fn)(char*);
+void set_update_function(update_fn up_new);
+
 int module_execute(char* name);
