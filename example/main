@@ -1,0 +1,4 @@
+#!/bin/bash
+#example elsa module
+echo hello world
+env

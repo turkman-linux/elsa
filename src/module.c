@@ -14,19 +14,27 @@ void set_update_function(update_fn up_new){
 
 static bool is_available_module(char* name);
 static int execute_piped(char* cmd);
+static char* module_path;
 
 int module_execute(char* name){
     if(!update){
         update = (update_fn) puts;
     }
 
+    if(!module_path){
+        if(getenv("ELSA_MODULES")){
+            module_path = getenv("ELSA_MODULES");
+        }else {
+            module_path = MODULE_PATH;
+        }
+    }
     if(!is_available_module(name)){
         return 2;
     }
     clear_env();
     printf("Executing module => %s\n", name);
     char module[PATH_MAX];
-    strcpy(module, MODULE_PATH);
+    strcpy(module, module_path);
     strcat(module, name);
     return execute_piped(module);
 }
@@ -66,7 +74,7 @@ static int execute_piped(char* cmd){
 
 static bool is_available_module(char* name){
     char module[PATH_MAX];
-    strcpy(module, MODULE_PATH);
+    strcpy(module, module_path);
     strcat(module, name);
     FILE *fd = fopen(module, "r");
     if(fd == NULL){
