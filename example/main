@@ -6,4 +6,4 @@ f=test
 for e in $(eval echo "\${main_$f}") ; do
     echo $e
 done
-#env
+env

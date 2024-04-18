@@ -61,7 +61,8 @@ static void module_init(){
         }
     }
 }
-
+#define startswith(A, B) \
+    strlen(A) >= strlen(B) && strncmp(A, B, strlen(A)) == 0
 static int module_invoke(char* name){
     printf("Executing module => %s\n", name);
     char** envs = save_env();
@@ -70,6 +71,9 @@ static int module_invoke(char* name){
     int len;
     char** sections = ini_get_section_names(config, &len);
     for(int i=0;i<len;i++){
+        if(!startswith(sections[i], name)){
+            continue;
+        }
         char* area = ini_get_area(config, sections[i]);
         int llen;
         char** names = ini_get_value_names(area, &llen);
@@ -85,6 +89,7 @@ static int module_invoke(char* name){
     strcat(module, name);
     int status = execute_piped(module);
     restore_env(envs);
+    return status;
 }
 
 
