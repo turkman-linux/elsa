@@ -1,4 +1,9 @@
 #!/bin/bash
 #example elsa module
+set -e
 echo hello world
-env
+f=test
+for e in $(eval echo "\${main_$f}") ; do
+    echo $e
+done
+#env

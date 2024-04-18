@@ -67,6 +67,20 @@ static int module_invoke(char* name){
     char** envs = save_env();
     clear_env();
     char module[PATH_MAX];
+    int len;
+    char** sections = ini_get_section_names(config, &len);
+    for(int i=0;i<len;i++){
+        char* area = ini_get_area(config, sections[i]);
+        int llen;
+        char** names = ini_get_value_names(area, &llen);
+        for(int j=0;j<llen;j++){
+            char envname[PATH_MAX];
+            strcpy(envname, sections[i]);
+            strcat(envname, "_");
+            strcat(envname, names[j]);
+            setenv(envname, ini_get_value(area, names[j]), 1);
+        }
+    }
     strcpy(module, module_path);
     strcat(module, name);
     int status = execute_piped(module);
@@ -90,6 +104,7 @@ static int execute_piped(char* cmd){
             if(buffer[l-1] == '\n'){
                 buffer[l-1] = '\0';
                 l--;
+
             } else {
                 break;
             }
