@@ -1,9 +1,21 @@
 SHELL=/bin/bash
-build: clean
-	mkdir build
-	$(CC) -o build/libelsa.so `find src/ -type f -iname '*.c'` -Iinclude -shared -fPIC $(CFLAGS)
-	for file in `ls cli/*.c` ; do \
-	    gcc $$file -o build/$$(basename $$file | sed "s/\.c//g") -Iinclude -Lbuild -lelsa $(CFLAGS);\
+
+ELSA_OBJS=$(shell find src/ -type f -iname '*.c' | sed "s/\.c/.o/g")
+CLI_OBJS=$(shell find cli/ -type f -iname '*.c' | sed "s/\.c/.o/g")
+
+
+build: clean libelsa cli
+
+%.o: %.c
+	install -d $(shell dirname build/$@)
+	$(CC) -c -fPIC -o build/$@ $< -Iinclude
+
+libelsa: $(ELSA_OBJS)
+	cd build ; $(CC) $(ELSA_OBJS) -o libelsa.so -shared -fPIC $(CFLAGS) -nostdlib -lc
+
+cli: libelsa $(CLI_OBJS)
+	cd build ; for cli in $(CLI_OBJS) ; do \
+	    $(CC) $$cli -o $$(basename $$cli | sed "s/\.o//g") -L. -lelsa ;\
 	done
 
 clean:
