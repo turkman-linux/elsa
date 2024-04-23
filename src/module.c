@@ -18,6 +18,7 @@ static int module_invoke(char* name);
 static void module_init();
 static int execute_piped(char* cmd);
 static char* module_path;
+static char* config_path;
 static char* config;
 
 int module_execute(char* name){
@@ -40,7 +41,6 @@ int module_execute(char* name){
     }
     module_invoke(name);
 }
-
 static void module_init(){
     if(!update){
         update = (update_fn) puts;
@@ -52,15 +52,37 @@ static void module_init(){
         }else {
             module_path = MODULE_PATH;
         }
+        realpath(module_path, module_path);
+        module_path = strdup(module_path);
+        puts(module_path);
     }
-    if(!config){
+    if(!config || !config_path){
         if(getenv("ELSA_CONFIG")){
-            config = readlines(getenv("ELSA_CONFIG"));
+            config_path = getenv("ELSA_CONFIG");
         } else {
-            config = readlines(CONFIG_FILE);
+            config_path = CONFIG_FILE;
         }
+        realpath(config_path, config_path);
+        config_path = strdup(config_path);
+        puts(config_path);
+        config = readlines(config_path);
     }
 }
+static bool is_available_module(char* name){
+    char module[PATH_MAX];
+    strcpy(module, module_path);
+    strcat(module, "/");
+    strcat(module, name);
+    FILE *fd = fopen(module, "r");
+    if(fd == NULL){
+        printf("Module %s is not available.\n  => %s\n",name, module);
+        return false;
+    }else {
+        fclose(fd);
+        return true;
+    }
+}
+
 #define startswith(A, B) \
     strlen(A) >= strlen(B) && strncmp(A, B, strlen(A)) == 0
 static int module_invoke(char* name){
@@ -85,7 +107,10 @@ static int module_invoke(char* name){
             setenv(envname, ini_get_value(area, names[j]), 1);
         }
     }
+    setenv("ELSA_CONFIG", config_path, 1);
+    setenv("ELSA_MODULES", module_path, 1);
     strcpy(module, module_path);
+    strcat(module, "/");
     strcat(module, name);
     int status = execute_piped(module);
     restore_env(envs);
@@ -124,17 +149,3 @@ static int execute_piped(char* cmd){
     return status;
 }
 
-
-static bool is_available_module(char* name){
-    char module[PATH_MAX];
-    strcpy(module, module_path);
-    strcat(module, name);
-    FILE *fd = fopen(module, "r");
-    if(fd == NULL){
-        printf("Module %s is not available.\n",name);
-        return false;
-    }else {
-        fclose(fd);
-        return true;
-    }
-}

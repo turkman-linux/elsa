@@ -2,8 +2,12 @@
 #example elsa module
 set -e
 echo hello world
-f=test
-for e in $(eval echo "\${main_$f}") ; do
-    echo $e
+function get_value(){
+    echo $(eval echo "\${main_${1}_test}")
+}
+
+for e in $(get_value feature) ; do
+    echo "ITEM:" $e
 done
-env
+echo "### ENVS ###"
+env | sort
