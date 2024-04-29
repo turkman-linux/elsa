@@ -13,7 +13,6 @@
 
 //header
 int status = 0;
-static int iseq(char * str1, char * str2);
 
 char * ini_get_area(char * ctx, char * name) {
     int len = strcount(ctx, "\n");
@@ -124,7 +123,7 @@ char** ini_get_section_names(char* ctx, int* len) {
     return ret;
 }
 
-static int iseq(char * str1, char * str2) {
+int iseq(char * str1, char * str2) {
     for (int i = 0; i < strlen(str1); i++) {
         if (str1[i] != str2[i]) {
             return 0;

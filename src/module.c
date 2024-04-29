@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <dirent.h>
 
 #include <module.h>
 #include <environ.h>
@@ -52,9 +53,14 @@ static void module_init(){
         }else {
             module_path = MODULE_PATH;
         }
+        DIR* f = opendir(module_path);
+        if(!f){
+            printf("Module path %s is invalid!\n", module_path);
+            return;
+        }
+        closedir(f);
         realpath(module_path, module_path);
         module_path = strdup(module_path);
-        puts(module_path);
     }
     if(!config || !config_path){
         if(getenv("ELSA_CONFIG")){
@@ -62,6 +68,12 @@ static void module_init(){
         } else {
             config_path = CONFIG_FILE;
         }
+        FILE* f = fopen(config_path, "r");
+        if(!f){
+            printf("Config file %s is invalid!\n", config_path);
+            return;
+        }
+        fclose(f);
         realpath(config_path, config_path);
         config_path = strdup(config_path);
         puts(config_path);

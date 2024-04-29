@@ -25,4 +25,4 @@ test: build
 	env LD_LIBRARY_PATH=$$PWD/build \
 	    ELSA_CONFIG=example/elsa.conf \
 	    ELSA_MODULES=example/ \
-	    $(gdb) ./build/test
+	    $(gdb) ./build/elsa
