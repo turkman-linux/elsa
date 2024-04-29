@@ -1,0 +1,27 @@
+#!/bin/bash
+## example configuration
+# [mount]
+# source=/dev/loop0
+# parts=sda2 sda1
+# [mount_sda1]
+# target=/boot
+# option=rw
+# [mount_sda2]
+# target=/
+# option=rw
+
+set -e
+function get_value(){
+    echo $(eval echo "\${mount_${1}}")
+}
+env
+
+mkdir -p /source /target
+mount -o loop,ro ${mount_source} /source
+
+for part in $(get_value parts) ; do
+    target=$(get_value "$part"_target)
+    option=$(get_value "$part"_option)
+    mkdir -p  "/target/$target"
+    mount -o "$option" /dev/"$part" "/target/$target"
+done

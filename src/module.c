@@ -97,7 +97,7 @@ static bool is_available_module(char* name){
 }
 
 #define startswith(A, B) \
-    strlen(A) >= strlen(B) && strncmp(A, B, strlen(A)) == 0
+    strncmp(A, B, strlen(B)) == 0
 static int module_invoke(char* name){
     printf("Executing module => %s\n", name);
     char** envs = save_env();
@@ -119,7 +119,7 @@ static int module_invoke(char* name){
             strcat(envname, names[j]);
             setenv(envname, ini_get_value(area, names[j]), 1);
         }
-    }
+   }
     setenv("ELSA_CONFIG", config_path, 1);
     setenv("ELSA_MODULES", module_path, 1);
     strcpy(module, module_path);
