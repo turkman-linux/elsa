@@ -1,0 +1,8 @@
+#!/bin/bash
+## example configuration
+# [copy]
+# source=/source
+# target=/target
+
+set -e
+cp -prvf ${copy_source}/. ${copy_target}/
