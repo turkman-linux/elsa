@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Elsa Installer (CLI)
+Comment=Installation Tool for GNU/Linux
+Path=/lib/elsa/
+Exec=pkexec elsa %U
+Icon=elsa
+Terminal=true
+Categories=System;
+

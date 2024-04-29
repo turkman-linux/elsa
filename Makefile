@@ -1,5 +1,10 @@
 SHELL=/bin/bash
 
+DESTDIR=/
+PREFIX=/usr/local
+LIBDIR=/lib
+BINDIR=/bin
+
 ELSA_OBJS=$(shell find src/ -type f -iname '*.c' | sed "s/\.c/.o/g")
 CLI_OBJS=$(shell find cli/ -type f -iname '*.c' | sed "s/\.c/.o/g")
 
@@ -20,6 +25,18 @@ cli: libelsa $(CLI_OBJS)
 
 clean:
 	rm -rf build
+
+install: libelsa cli
+	mkdir -p $(DESTDIR)/$(PREFIX)/$(LIBDIR)
+	mkdir -p $(DESTDIR)/$(PREFIX)/$(BINDIR)
+	mkdir -p $(DESTDIR)/$(PREFIX)/icons/hicolor/scalable/apps
+	mkdir -p $(DESTDIR)/$(PREFIX)/applications
+	mkdir -p $(DESTDIR)/lib/elsa/
+	install data/application.desktop $(DESTDIR)/$(PREFIX)/applications/elsa.desktop
+	install data/icon.svg $(DESTDIR)/$(PREFIX)/icons/hicolor/scalable/apps/elsa.svg
+	install build/libelsa.so $(DESTDIR)/$(PREFIX)/$(LIBDIR)
+	install build/elsa $(DESTDIR)/$(PREFIX)/$(BINDIR)
+	install modules/* $(DESTDIR)/lib/elsa/
 
 test: build
 	env LD_LIBRARY_PATH=$$PWD/build \
