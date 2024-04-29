@@ -21,7 +21,7 @@ function get_value(){
 for disk in ${partition_parts[@]} ; do
     head -c 512 /dev/zero > /dev/"$disk"
     table=$(get_value "$disk"_table)
-    echo "STATUS: Create table: /dev/$disk type: $table"
+    echo "STATUS:name=mktable:disk=/dev/$disk:type=$table"
     parted -s /dev/"$disk" mklabel "$table"
     create=$(get_value  "$disk"_create)
     for part in $(eval echo {1..$create}) ; do
@@ -29,7 +29,7 @@ for disk in ${partition_parts[@]} ; do
         begin=$(get_value "$part"_begin)
         size=$(get_value "$part"_size)
         type=$(get_value "$part"_type)
-        echo "STATUS: Create partition: /dev/$part type: $type size: $size"
+        echo "STATUS:name=mkpart:disk=/dev/$part:type=$type:size=$size"
         parted -s /dev/"$disk" mkpart primary "$begin" "$size"
         sync
         mkfs."$type" /dev/"$part"

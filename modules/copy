@@ -5,4 +5,16 @@
 # target=/target
 
 set -e
-cp -prvf ${copy_source}/. ${copy_target}/
+total=$(df -i /${copy_source} | tr -s " " | cut -f2 -d" " | tail -n 1)
+count=0
+percent_last=""
+cp -prvf ${copy_source}/. ${copy_target}/ |& while read line ; do
+    count=$(($count+1))
+    percent=$((($count*1000)/total))
+    if [[ "${percent_last}" != "$percent" ]] ; then
+        echo "STATUS:name=copy:percent=$percent"
+        percent_last=$percent
+    fi
+done
+echo "STATUS:name=sync"
+sync

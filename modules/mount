@@ -22,6 +22,7 @@ mount -o loop,ro ${mount_source} /source
 for part in $(get_value parts) ; do
     target=$(get_value "$part"_target)
     option=$(get_value "$part"_option)
+    echo "STATUS:name=mount:disk=$part:target=$target:option=$option"
     mkdir -p  "/target/$target"
     mount -o "$option" /dev/"$part" "/target/$target"
 done
