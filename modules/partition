@@ -1,12 +1,12 @@
 #!/bin/bash
 ## example configuration
 # [partition]
-# parts=sda sdb
-# [partiton_sda]
+# parts=sda
+# [partition_sda]
 # table=gpt
 # create=2
 # [partition_sda1]
-# begin=4s
+# begin=2048s
 # size=100M
 # type=vfat
 # [partition_sda2]
@@ -18,18 +18,19 @@ set -e
 function get_value(){
     echo $(eval echo "\${partition_${1}}")
 }
-
 for disk in ${partition_parts[@]} ; do
     head -c 512 /dev/zero > /dev/"$disk"
     table=$(get_value "$disk"_table)
     echo "STATUS: Create table: /dev/$disk type: $table"
     parted -s /dev/"$disk" mklabel "$table"
-    for part in {1..$(get_value  "$disk"_create)} ; do
+    create=$(get_value  "$disk"_create)
+    for part in $(eval echo {1..$create}) ; do
+        part="$disk""$part"
         begin=$(get_value "$part"_begin)
         size=$(get_value "$part"_size)
         type=$(get_value "$part"_type)
         echo "STATUS: Create partition: /dev/$part type: $type size: $size"
-        parted -s /dev/"$disk" mkpart primary linux "$begin" "$size"
+        parted -s /dev/"$disk" mkpart primary "$begin" "$size"
         sync
         mkfs."$type" /dev/"$part"
         sync

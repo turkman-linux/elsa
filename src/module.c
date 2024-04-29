@@ -61,7 +61,6 @@ static void module_init(){
             return;
         }
         closedir(f);
-        realpath(module_path, module_path);
         module_path = strdup(module_path);
     }
     if(!config_path){
@@ -76,7 +75,6 @@ static void module_init(){
             return;
         }
         fclose(f);
-        realpath(config_path, config_path);
         config_path = strdup(config_path);
     }
     if(!config) {

@@ -1,0 +1,5 @@
+#!/bin/bash
+## example configuration
+# [main]
+# dependencies=partition mount copy grub
+exit 0
