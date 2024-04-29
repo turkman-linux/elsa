@@ -103,7 +103,7 @@ static bool is_available_module(char* name){
 static int module_invoke(char* name){
     printf("Executing module => %s\n", name);
     char** envs = save_env();
-    //clear_env();
+    clear_env();
     char module[PATH_MAX];
     int len;
     char** sections = ini_get_section_names(config, &len);

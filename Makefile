@@ -23,6 +23,6 @@ clean:
 
 test: build
 	env LD_LIBRARY_PATH=$$PWD/build \
-	    ELSA_CONFIG=example/elsa.conf \
-	    ELSA_MODULES=example/ \
-	    $(gdb) ./build/elsa
+	    $(gdb) ./build/elsa \
+	        -m example \
+	        -c example/elsa.conf
