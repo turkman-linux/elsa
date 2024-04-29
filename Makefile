@@ -39,7 +39,7 @@ install: libelsa cli
 install_launcher:
 	mkdir -p $(DESTDIR)/$(PREFIX)/share/applications
 	install data/application.desktop $(DESTDIR)/$(PREFIX)/share/applications/elsa.desktop
-	sed -i $(DESTDIR)/$(PREFIX)/share/applications/elsa.desktop "s|@BINDIR@|$(BINDIR)|g"	
+	sed -i "s|@BINDIR@|$(PREFIX)/$(BINDIR)|g" $(DESTDIR)/$(PREFIX)/share/applications/elsa.desktop
 
 test: build
 	env LD_LIBRARY_PATH=$$PWD/build \
