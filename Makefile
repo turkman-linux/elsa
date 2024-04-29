@@ -30,14 +30,16 @@ install: libelsa cli
 	mkdir -p $(DESTDIR)/$(PREFIX)/$(LIBDIR)
 	mkdir -p $(DESTDIR)/$(PREFIX)/$(BINDIR)
 	mkdir -p $(DESTDIR)/$(PREFIX)/share/icons/hicolor/scalable/apps
-	mkdir -p $(DESTDIR)/$(PREFIX)/share/applications
 	mkdir -p $(DESTDIR)/lib/elsa/
 	install data/icon.svg $(DESTDIR)/$(PREFIX)/share/icons/hicolor/scalable/apps/elsa.svg
 	install build/libelsa.so $(DESTDIR)/$(PREFIX)/$(LIBDIR)
 	install build/elsa $(DESTDIR)/$(PREFIX)/$(BINDIR)
 	install modules/* $(DESTDIR)/lib/elsa/
+
+install_launcher:
+	mkdir -p $(DESTDIR)/$(PREFIX)/share/applications
 	install data/application.desktop $(DESTDIR)/$(PREFIX)/share/applications/elsa.desktop
-	sed -i $(DESTDIR)/$(PREFIX)/share/applications/elsa.desktop "s|@BINDIR@|$(BINDIR)|g"
+	sed -i $(DESTDIR)/$(PREFIX)/share/applications/elsa.desktop "s|@BINDIR@|$(BINDIR)|g"	
 
 test: build
 	env LD_LIBRARY_PATH=$$PWD/build \
