@@ -1,4 +1,4 @@
-# Elsa (Efficient Linux Setup Asistant) installer
+# Elsa (Efficient Linux Setup Assistant) installer
 Simple and module based installation tool.
 ## build:
 ```
