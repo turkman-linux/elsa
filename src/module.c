@@ -18,9 +18,11 @@ static bool is_available_module(char* name);
 static int module_invoke(char* name);
 static void module_init();
 static int execute_piped(char* cmd);
-static char* module_path;
-static char* config_path;
 static char* config;
+
+char* module_path;
+char* config_path;
+
 
 int module_execute(char* name){
     module_init();
@@ -62,7 +64,7 @@ static void module_init(){
         realpath(module_path, module_path);
         module_path = strdup(module_path);
     }
-    if(!config || !config_path){
+    if(!config_path){
         if(getenv("ELSA_CONFIG")){
             config_path = getenv("ELSA_CONFIG");
         } else {
@@ -76,7 +78,8 @@ static void module_init(){
         fclose(f);
         realpath(config_path, config_path);
         config_path = strdup(config_path);
-        puts(config_path);
+    }
+    if(!config) {
         config = readlines(config_path);
     }
 }
@@ -100,7 +103,7 @@ static bool is_available_module(char* name){
 static int module_invoke(char* name){
     printf("Executing module => %s\n", name);
     char** envs = save_env();
-    clear_env();
+    //clear_env();
     char module[PATH_MAX];
     int len;
     char** sections = ini_get_section_names(config, &len);

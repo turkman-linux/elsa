@@ -11,7 +11,7 @@ build: clean libelsa cli
 	$(CC) -c -fPIC -o build/$@ $< -Iinclude -g3
 
 libelsa: $(ELSA_OBJS)
-	cd build ; $(CC) $(ELSA_OBJS) -o libelsa.so -shared -fPIC $(CFLAGS) -nostdlib -lc
+	cd build ; $(CC) $(ELSA_OBJS) -o libelsa.so -shared -fPIC $(CFLAGS)
 
 cli: libelsa $(CLI_OBJS)
 	cd build ; for cli in $(CLI_OBJS) ; do \

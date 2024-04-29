@@ -3,6 +3,7 @@
 
 extern char **environ;
 void clear_env(){
+    system("env");
     char *path = strdup(getenv("PATH"));
     char *env[1];
     env[0] = NULL;
