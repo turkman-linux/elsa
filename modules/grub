@@ -1,0 +1,25 @@
+#!/bin/bash
+## Example Configuration
+# [grub]
+# device=sda
+# type=x86_64-efi
+# target=x86_64-efi
+set -e
+
+for dir in dev sys proc run ; do
+    mount --bind /$dir /"${grub_target}"/"$dir"
+done
+if [[ -d /sys/firmware/efi/ ]] ; then
+    mount -t efivarfs efivarfs /"${grub_target}"/sys/firmware/efi/efivars
+    mkdir -p /"${grub_target}"/boot/efi
+fi
+echo "STATUS:name=grub:device=${grub_device}:type=${grub_type}"
+chroot /"${grub_target}" grub-install --removable \
+    --target="${grub_type}" /dev/"${grub_device}"
+
+if [[ -d /sys/firmware/efi/ ]] ; then
+    umount -lf /"${grub_target}"/sys/firmware/efi/efivars
+fi
+for dir in dev sys proc run ; do
+    umount -lf /"${grub_target}"/"$dir"
+done
