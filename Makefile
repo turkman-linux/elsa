@@ -27,6 +27,7 @@ clean:
 	rm -rf build
 
 install: libelsa cli
+	chmod 755 modules/*
 	mkdir -p $(DESTDIR)/$(PREFIX)/$(LIBDIR)
 	mkdir -p $(DESTDIR)/$(PREFIX)/$(BINDIR)
 	mkdir -p $(DESTDIR)/$(PREFIX)/share/icons/hicolor/scalable/apps
