@@ -14,15 +14,28 @@ set -e
 function get_value(){
     echo $(eval echo "\${mount_${1}}")
 }
-env
 
+function find_uuid(){
+    for v in /dev/disk/by-uuid/* ; do
+        uuid=$(basename $v)
+        disk=$(basename $(readlink $v))
+        if [[ "$1" == "$disk" ]] ; then
+            echo $uuid
+            return
+        fi
+    done
+}
 mkdir -p /source /target
 mount -o loop,ro ${mount_source} /source
-
+> /tmp/fstab.elsa
 for part in $(get_value parts) ; do
-    target=$(get_value "$part"_target)
+    target=$(realpath $(get_value "$part"_target))
     option=$(get_value "$part"_option)
     echo "STATUS:name=mount:disk=$part:target=$target:option=$option"
-    mkdir -p  "/target/$target"
-    mount -o "$option" /dev/"$part" "/target/$target"
+    mkdir -p  "/target$target"
+    mount -o "$option" /dev/"$part" "/target$target"
+    type=$(mount | grep " /target$target " | cut -f5 -d" ")
+    uuid=$(find_uuid "$part")
+    echo "#/dev/$disk" >> /tmp/fstab.elsa
+    echo "UUID=$uuid $target $type $options 0 0" >> /tmp/fstab.elsa
 done
