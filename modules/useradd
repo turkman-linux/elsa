@@ -1,0 +1,30 @@
+#!/bin/bash
+## Example configuration
+# [useradd]
+# users=pingu
+# [useradd_pingu]
+# password=123
+# homedir=/home/pingu
+# shell=/bin/bash
+# groups=audio video input kvm tty users wheel
+
+set -e
+function get_value(){
+    echo $(eval echo "\${useradd_${1}}")
+}
+for user in ${useradd_users[@]} ; do
+    homedir=$(get_value "$user"_homedir)
+    password=$(get_value "$user"_password)
+    shell=$(get_value "$user"_shell)
+    groups=$(get_value "$user"_groups)
+    if [[ ! -d /target/"${homedir}" ]] ; then
+        mkdir -p /target/"${homedir}"
+    fi
+
+    chroot /target useradd -d "${homedir}" -s "${shell}" "${user}"
+    for grp in "${groups[@]}" ; do
+        chroot /target usermod -aG "${grp}" "${user}" || true
+    done
+done
+sync
+

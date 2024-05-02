@@ -36,3 +36,4 @@ for disk in ${partition_parts[@]} ; do
         sync
     done
 done
+

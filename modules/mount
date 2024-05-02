@@ -39,3 +39,4 @@ for part in $(get_value parts) ; do
     echo "#/dev/$disk" >> /tmp/fstab.elsa
     echo "UUID=$uuid $target $type $options 0 0" >> /tmp/fstab.elsa
 done
+

@@ -18,3 +18,4 @@ cp -prvf ${copy_source}/. ${copy_target}/ |& while read line ; do
 done
 echo "STATUS:name=sync"
 sync
+
