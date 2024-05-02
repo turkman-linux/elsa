@@ -22,7 +22,7 @@ for user in ${useradd_users[@]} ; do
     fi
 
     chroot /target useradd -d "${homedir}" -s "${shell}" "${user}"
-    for grp in "${groups[@]}" ; do
+    for grp in ${groups[@]} ; do
         chroot /target usermod -aG "${grp}" "${user}" || true
     done
 done

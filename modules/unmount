@@ -1,10 +1,8 @@
 #!/bin/bash
 ## example configuration
-# [unmount]
-# target=/target
-
+# empty
 set -e
-mount | grep " ${umount_target}" | cut -f3 -d" " | sort -V -r | while read dir ; do
+mount | grep " /target" | cut -f3 -d" " | sort -V -r | while read dir ; do
     umount -lf "$dir"
 done
 if mount | grep " /source" >/dev/null ; then

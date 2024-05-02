@@ -3,33 +3,32 @@
 # [grub]
 # device=sda
 # type=x86_64-efi
-# target=/target
 # update=true
 
 set -e
 
 for dir in dev sys proc run ; do
-    mount --bind /$dir /"${grub_target}"/"$dir"
+    mount --bind /$dir /target/"$dir"
 done
 
 if [[ -d /sys/firmware/efi/ ]] ; then
-    mount -t efivarfs efivarfs /"${grub_target}"/sys/firmware/efi/efivars
-    mkdir -p /"${grub_target}"/boot/efi
+    mount -t efivarfs efivarfs /target/sys/firmware/efi/efivars
+    mkdir -p /target/boot/efi
 fi
 
 echo "STATUS:name=grub:device=${grub_device}:type=${grub_type}"
-chroot /"${grub_target}" grub-install --removable \
+chroot /target grub-install --removable \
     --target="${grub_type}" /dev/"${grub_device}"
 if [[ "${grub_update}" == true ]] ; then
-    chroot /"${grub_target}" grub-mkconfig -o /boot/grub/grub.cfg
+    chroot /target grub-mkconfig -o /boot/grub/grub.cfg
 fi
 
 if [[ -d /sys/firmware/efi/ ]] ; then
-    umount -lf /"${grub_target}"/sys/firmware/efi/efivars
+    umount -lf /target/sys/firmware/efi/efivars
 fi
 
 for dir in dev sys proc run ; do
-    umount -lf /"${grub_target}"/"$dir"
+    umount -lf /target/"$dir"
 done
 sync
 

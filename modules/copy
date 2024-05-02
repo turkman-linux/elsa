@@ -1,14 +1,12 @@
 #!/bin/bash
 ## example configuration
-# [copy]
-# source=/source
-# target=/target
+# empty
 
 set -e
-total=$(df -i /${copy_source} | tr -s " " | cut -f2 -d" " | tail -n 1)
+total=$(df -i /source | tr -s " " | cut -f2 -d" " | tail -n 1)
 count=0
 percent_last=""
-cp -prvf ${copy_source}/. ${copy_target}/ |& while read line ; do
+cp -prvf /source/. /target/ |& while read line ; do
     count=$(($count+1))
     percent=$((($count*1000)/total))
     if [[ "${percent_last}" != "$percent" ]] ; then
