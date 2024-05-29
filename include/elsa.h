@@ -3,4 +3,5 @@
 #include <module.h>
 #include <environ.h>
 #include <iniparser.h>
+#include <layout.h>
 #endif

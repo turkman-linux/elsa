@@ -39,7 +39,7 @@ char * ini_get_area(char * ctx, char * name) {
 }
 static char * val_process(char * ctx, char * name) {
     char * ret = malloc(sizeof(char) * (strlen(ctx)));
-    for (int i = strlen(name); i < strlen(ctx) + 1; i++) {
+    for (size_t i = strlen(name); i < strlen(ctx) + 1; i++) {
         ret[i - strlen(name)] = ctx[i];
     }
     ret[strlen(ctx) - strlen(name) + 1] = '\0';
@@ -48,7 +48,7 @@ static char * val_process(char * ctx, char * name) {
 
 static char * nam_process(char * ctx) {
     int len=0;
-    for(int i=0;i<strlen(ctx);i++){
+    for(size_t i=0;i<strlen(ctx);i++){
         if(ctx[i] == '='){
             len = i;
             break;
@@ -124,7 +124,7 @@ char** ini_get_section_names(char* ctx, int* len) {
 }
 
 int iseq(char * str1, char * str2) {
-    for (int i = 0; i < strlen(str1); i++) {
+    for (size_t i = 0; i < strlen(str1); i++) {
         if (str1[i] != str2[i]) {
             return 0;
         }
@@ -135,7 +135,7 @@ int iseq(char * str1, char * str2) {
 //util functions
 int strcount(char * buf, char * c) {
     int size = 1;
-    for (int i = 0; i <= strlen(buf); i++) {
+    for (size_t i = 0; i <= strlen(buf); i++) {
         if (buf[i] == c[0]) {
             size++;
         }
@@ -227,9 +227,9 @@ char * readlines(const char * filename) {
 
     if (err) {
         if (err == FILE_NOT_EXIST) {
-            fprintf(stderr, "Error: %s\n", "file not found.", err);
+            fprintf(stderr, "Error: %s %d\n", "file not found.", err);
         } else if (err == FILE_READ_ERROR) {
-            fprintf(stderr, "Error: %s\n", "failed to read file.", err);
+            fprintf(stderr, "Error: %s %d\n", "failed to read file.", err);
         }
         exit(err);
     } else {

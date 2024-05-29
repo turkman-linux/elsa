@@ -5,18 +5,23 @@ PREFIX=/usr/local
 LIBDIR=/lib
 BINDIR=/bin
 
+Deps=libxml-2.0
+
+DepCFLAGS=$(shell pkg-config --cflags $(Deps)) -Wall -Wextra -Werror
+DepLIBS=$(shell pkg-config --libs $(Deps))
+
 ELSA_OBJS=$(shell find src/ -type f -iname '*.c' | sed "s/\.c/.o/g")
-CLI_OBJS=$(shell find cli/ -type f -iname '*.c' | sed "s/\.c/.o/g")
+CLI_OBJS=$(shell find example/ cli/ -type f -iname '*.c' | sed "s/\.c/.o/g")
 
 
 build: clean libelsa cli
 
 %.o: %.c
-	install -d $(shell dirname build/$@)
-	$(CC) -c -fPIC -o build/$@ $< -Iinclude -g3
+	@install -d $(shell dirname build/$@)
+	$(CC) -c -fPIC -Iinclude $(DepCFLAGS) -o build/$@ $< -Iinclude -g3
 
 libelsa: $(ELSA_OBJS)
-	cd build ; $(CC) $(ELSA_OBJS) -o libelsa.so -shared -fPIC $(CFLAGS)
+	cd build ; $(CC)  $(ELSA_OBJS) $(DepLIBS) -o libelsa.so -shared -fPIC $(CFLAGS)
 
 cli: libelsa $(CLI_OBJS)
 	cd build ; for cli in $(CLI_OBJS) ; do \

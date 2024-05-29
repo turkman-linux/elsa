@@ -43,10 +43,15 @@ int module_execute(char* name){
         }
     }
     module_invoke(name);
+    return 0;
 }
+static void default_print(char* message){
+    puts(message);
+}
+
 static void module_init(){
     if(!update){
-        update = (update_fn) puts;
+        update = (update_fn) default_print;
     }
 
     if(!module_path){
