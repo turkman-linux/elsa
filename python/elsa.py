@@ -70,3 +70,20 @@ def readlines(filename):
 
 # environ.h
 # empty...
+
+# layout.h
+class LayoutInfo(ctypes.Structure):
+    _fields_ = [
+        ("name", ctypes.c_char_p),
+        ("description", ctypes.c_char_p)
+    ]
+
+elsa.get_keyboard_layouts.restype = ctypes.POINTER(LayoutInfo)
+elsa.get_keyboard_layouts.argtypes = [ctypes.POINTER(ctypes.c_int)]
+
+# Define a wrapper function for get_keyboard_layouts
+def get_keyboard_layouts():
+    length = ctypes.c_int()
+    layouts_ptr = elsa.get_keyboard_layouts(ctypes.byref(length))
+    layouts = layouts_ptr[:length.value]
+    return layouts
