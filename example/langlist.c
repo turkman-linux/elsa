@@ -8,7 +8,9 @@ int main(int argc, char** argv){
     int numLayouts;
     LayoutInfo* layouts = get_keyboard_layouts(&numLayouts);
     for (int i = 0; i < numLayouts; i++) {
-        printf("%s %s\n", layouts[i].name, layouts[i].description);
+        for (int j = 0; j < layouts[i].numVariant; j++) {
+            printf("%s %s %s %s\n", layouts[i].name, layouts[i].description, layouts[i].variants[j].name, layouts[i].variants[j].description);
+        }
     }
     
     // Free layout information array

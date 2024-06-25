@@ -30,33 +30,53 @@ static xmlNodePtr* find_nodes(xmlNodePtr root, const char* name, int* numNodes) 
 
 // Function to process layout nodes
 static void process_layout_nodes(xmlNodePtr layoutNode, LayoutInfo* layouts, int* numLayouts) {
-    xmlNodePtr* configItemNodes;
-    int numConfigItems;
+    xmlNodePtr *configItemNodes, *variantItemNodes;
+    int numConfigItems, numVariantItems;
     configItemNodes = find_nodes(layoutNode, "configItem", &numConfigItems);
     if (configItemNodes == NULL) {
         fprintf(stderr, "Error: unable to find configItem nodes\n");
         return;
     }
-
-    for (int i = 0; i < numConfigItems; i++) {
-        for (xmlNodePtr nameNode = configItemNodes[i]->children; nameNode; nameNode = nameNode->next) {
-		    if (nameNode && xmlStrcmp(nameNode->name, (const xmlChar*)"name") == 0) {
-		        xmlChar *layoutName = xmlNodeGetContent(nameNode);
-		        // Insert layout information into the array
-		        layouts[*numLayouts].name = strdup((const char*)layoutName);
-		        layouts[*numLayouts].description = NULL;
-		        xmlFree(layoutName);
-		    }
-		    if (nameNode && xmlStrcmp(nameNode->name, (const xmlChar*)"description") == 0) {
-		        xmlChar *layoutDescription = xmlNodeGetContent(nameNode);
-		        // Insert layout information into the array
-		        layouts[*numLayouts].description = strdup((const char*)layoutDescription);
-		        xmlFree(layoutDescription);
-		    }
-		}
-        (*numLayouts)++;
+    variantItemNodes = find_nodes(layoutNode, "variantList", &numVariantItems);
+    if (variantItemNodes == NULL) {
+        fprintf(stderr, "Error: unable to find configItem nodes\n");
+        return;
     }
-
+    for (xmlNodePtr nameNode = configItemNodes[0]->children; nameNode; nameNode = nameNode->next) {
+        if (nameNode && xmlStrcmp(nameNode->name, (const xmlChar*)"name") == 0) {
+	        xmlChar *layoutName = xmlNodeGetContent(nameNode);
+	        // Insert layout information into the array
+	        layouts[*numLayouts].name = strdup((const char*)layoutName);
+	        layouts[*numLayouts].description = NULL;
+	        xmlFree(layoutName);
+	    }
+	    if (nameNode && xmlStrcmp(nameNode->name, (const xmlChar*)"description") == 0) {
+	        xmlChar *layoutDescription = xmlNodeGetContent(nameNode);
+	        // Insert layout information into the array
+	        layouts[*numLayouts].description = strdup((const char*)layoutDescription);
+	        xmlFree(layoutDescription);
+	    }
+	}
+    for (xmlNodePtr nameNode = variantItemNodes[0]->children; nameNode; nameNode = nameNode->next) {
+        if (nameNode && xmlStrcmp(nameNode->name, (const xmlChar*)"variant") == 0) {
+            int numVariant;
+            xmlNodePtr *variantNodes = find_nodes(layoutNode, "configItem", &numVariant);
+            layouts[*numLayouts].variants = calloc(numVariant, sizeof(VariantInfo));
+            layouts[*numLayouts].numVariant = numVariant;
+            for (int i = 0; i < numVariant; i++) {
+                for (xmlNodePtr nameNode = variantNodes[i]->children; nameNode; nameNode = nameNode->next) {
+                    xmlChar *variantDescription = xmlNodeGetContent(nameNode);
+                    if (nameNode && xmlStrcmp(nameNode->name, (const xmlChar*)"name") == 0) {
+                        layouts[*numLayouts].variants[i].name = strdup((const char*)variantDescription);
+                    }
+                    if (nameNode && xmlStrcmp(nameNode->name, (const xmlChar*)"description") == 0) {
+                        layouts[*numLayouts].variants[i].description = strdup((const char*)variantDescription);
+                    }
+                }
+            }
+        }
+    }
+    (*numLayouts)++;
     // Free allocated memory
     free(configItemNodes);
 }
