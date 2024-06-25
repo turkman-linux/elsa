@@ -31,14 +31,9 @@ static xmlNodePtr* find_nodes(xmlNodePtr root, const char* name, int* numNodes) 
 // Function to process layout nodes
 static void process_layout_nodes(xmlNodePtr layoutNode, LayoutInfo* layouts, int* numLayouts) {
     xmlNodePtr *configItemNodes, *variantItemNodes;
-    int numConfigItems, numVariantItems;
+    int numConfigItems, numVariantItems, tmp;
     configItemNodes = find_nodes(layoutNode, "configItem", &numConfigItems);
     if (configItemNodes == NULL) {
-        fprintf(stderr, "Error: unable to find configItem nodes\n");
-        return;
-    }
-    variantItemNodes = find_nodes(layoutNode, "variantList", &numVariantItems);
-    if (variantItemNodes == NULL) {
         fprintf(stderr, "Error: unable to find configItem nodes\n");
         return;
     }
@@ -56,18 +51,26 @@ static void process_layout_nodes(xmlNodePtr layoutNode, LayoutInfo* layouts, int
 	        layouts[*numLayouts].description = strdup((const char*)layoutDescription);
 	        xmlFree(layoutDescription);
 	    }
-	}
-    for (xmlNodePtr nameNode = variantItemNodes[0]->children; nameNode; nameNode = nameNode->next) {
-        if (nameNode && xmlStrcmp(nameNode->name, (const xmlChar*)"variant") == 0) {
-            int numVariant;
-            xmlNodePtr *variantNodes = find_nodes(layoutNode, "configItem", &numVariant);
-            layouts[*numLayouts].variants = calloc(numVariant, sizeof(VariantInfo));
-            layouts[*numLayouts].numVariant = numVariant;
-            for (int i = 0; i < numVariant; i++) {
-                for (xmlNodePtr nameNode = variantNodes[i]->children; nameNode; nameNode = nameNode->next) {
+    }
+
+    variantItemNodes = find_nodes(layoutNode, "variantList", &numVariantItems);
+    if (variantItemNodes == NULL) {
+        layouts[*numLayouts].numVariant = 0;
+        return;
+    }
+
+    layouts[*numLayouts].variants = calloc(numVariantItems, sizeof(VariantInfo));
+    layouts[*numLayouts].numVariant = numVariantItems;
+    for(int i=0; i<numVariantItems;i++){
+        for (xmlNodePtr nameNode = variantItemNodes[i]->children; nameNode; nameNode = nameNode->next) {
+            if (nameNode && xmlStrcmp(nameNode->name, (const xmlChar*)"variant") == 0) {
+                xmlNodePtr *variantNodes = find_nodes(nameNode, "configItem", &tmp);
+                for (xmlNodePtr nameNode = variantNodes[0]->children; nameNode; nameNode = nameNode->next) {
                     xmlChar *variantDescription = xmlNodeGetContent(nameNode);
                     if (nameNode && xmlStrcmp(nameNode->name, (const xmlChar*)"name") == 0) {
+                    printf("%s %s\n", nameNode->name, variantDescription);
                         layouts[*numLayouts].variants[i].name = strdup((const char*)variantDescription);
+                        layouts[*numLayouts].variants[i].description = NULL;
                     }
                     if (nameNode && xmlStrcmp(nameNode->name, (const xmlChar*)"description") == 0) {
                         layouts[*numLayouts].variants[i].description = strdup((const char*)variantDescription);
