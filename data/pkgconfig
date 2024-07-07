@@ -1,7 +1,7 @@
 prefix=@prefix@
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
-includedir=${prefix}/include
+includedir=${prefix}/include/elsa
 
 Name: elsa
 Description: Efficient Linux Setup Assistant

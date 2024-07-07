@@ -34,6 +34,7 @@ clean:
 install: libelsa cli
 	chmod 755 modules/*
 	mkdir -p $(DESTDIR)/$(PREFIX)/$(LIBDIR)/pkgconfig
+	mkdir -p $(DESTDIR)/$(PREFIX)/include/elsa
 	mkdir -p $(DESTDIR)/$(PREFIX)/$(BINDIR)
 	mkdir -p $(DESTDIR)/$(PREFIX)/share/icons/hicolor/scalable/apps
 	mkdir -p $(DESTDIR)/lib/elsa/
@@ -43,6 +44,7 @@ install: libelsa cli
 	install build/libelsa.so $(DESTDIR)/$(PREFIX)/$(LIBDIR)
 	install build/elsa $(DESTDIR)/$(PREFIX)/$(BINDIR)
 	install modules/* $(DESTDIR)/lib/elsa/
+	install include/* $(DESTDIR)/$(PREFIX)/include/elsa/
 
 install_launcher:
 	mkdir -p $(DESTDIR)/$(PREFIX)/share/applications
