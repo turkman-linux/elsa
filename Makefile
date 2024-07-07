@@ -4,6 +4,7 @@ DESTDIR=/
 PREFIX=/usr/local
 LIBDIR=/lib
 BINDIR=/bin
+PYDIR=$(shell python3 -c "import site; print(site.getsitepackages()[0])")
 
 Deps=libxml-2.0
 
@@ -38,13 +39,15 @@ install: libelsa cli
 	mkdir -p $(DESTDIR)/$(PREFIX)/$(BINDIR)
 	mkdir -p $(DESTDIR)/$(PREFIX)/share/icons/hicolor/scalable/apps
 	mkdir -p $(DESTDIR)/lib/elsa/
+	mkdir -p $(DESTDIR)/$(PYDIR)
 	install data/pkgconfig $(DESTDIR)/$(PREFIX)/$(LIBDIR)/pkgconfig/elsa.pc
-	sed -i "s/@prefix@/$(PREFIX)/g" $(DESTDIR)/$(PREFIX)/$(LIBDIR)/pkgconfig/elsa.pc
+	sed -i "s|@prefix@|$(PREFIX)|g" $(DESTDIR)/$(PREFIX)/$(LIBDIR)/pkgconfig/elsa.pc
 	install data/icon.svg $(DESTDIR)/$(PREFIX)/share/icons/hicolor/scalable/apps/elsa.svg
 	install build/libelsa.so $(DESTDIR)/$(PREFIX)/$(LIBDIR)
 	install build/elsa $(DESTDIR)/$(PREFIX)/$(BINDIR)
 	install modules/* $(DESTDIR)/lib/elsa/
-	install include/* $(DESTDIR)/$(PREFIX)/include/elsa/
+	install include/*.h $(DESTDIR)/$(PREFIX)/include/elsa/
+	install python/*.py $(DESTDIR)/$(PYDIR)/
 
 install_launcher:
 	mkdir -p $(DESTDIR)/$(PREFIX)/share/applications
