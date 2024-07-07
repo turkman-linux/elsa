@@ -72,10 +72,18 @@ def readlines(filename):
 # empty...
 
 # layout.h
-class LayoutInfo(ctypes.Structure):
+class VariantInfo(ctypes.Structure):
     _fields_ = [
         ("name", ctypes.c_char_p),
         ("description", ctypes.c_char_p)
+    ]
+
+class LayoutInfo(ctypes.Structure):
+    _fields_ = [
+        ("name", ctypes.c_char_p),
+        ("description", ctypes.c_char_p),
+        ("variants", ctypes.POINTER(VariantInfo)),
+        ("numVariant", ctypes.c_int)
     ]
 
 elsa.get_keyboard_layouts.restype = ctypes.POINTER(LayoutInfo)
