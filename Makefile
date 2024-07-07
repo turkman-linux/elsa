@@ -33,10 +33,12 @@ clean:
 
 install: libelsa cli
 	chmod 755 modules/*
-	mkdir -p $(DESTDIR)/$(PREFIX)/$(LIBDIR)
+	mkdir -p $(DESTDIR)/$(PREFIX)/$(LIBDIR)/pkgconfig
 	mkdir -p $(DESTDIR)/$(PREFIX)/$(BINDIR)
 	mkdir -p $(DESTDIR)/$(PREFIX)/share/icons/hicolor/scalable/apps
 	mkdir -p $(DESTDIR)/lib/elsa/
+	install data/pkgconfig $(DESTDIR)/$(PREFIX)/$(LIBDIR)/pkgconfig/elsa.pc
+	sed -i "s/@prefix@/$(PREFIX)/g" $(DESTDIR)/$(PREFIX)/$(LIBDIR)/pkgconfig/elsa.pc
 	install data/icon.svg $(DESTDIR)/$(PREFIX)/share/icons/hicolor/scalable/apps/elsa.svg
 	install build/libelsa.so $(DESTDIR)/$(PREFIX)/$(LIBDIR)
 	install build/elsa $(DESTDIR)/$(PREFIX)/$(BINDIR)

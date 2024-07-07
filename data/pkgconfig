@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: elsa
+Description: Efficient Linux Setup Assistant
+Version: 1.0.0
+Libs: -L${libdir} -lelsa
+Cflags: -I${includedir}
