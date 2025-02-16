@@ -28,15 +28,3 @@ int main(int argc, char** argv){
     return module_execute("main");
 }
 ```
-Using libelsa with Python
-```python
-from elsa import module
-
-def updater_func(msg):
-    print(msg)
-
-if __name__ == "__main__":
-    module.set_update_function(updater_func)
-    return module.execute("main")
-```
-
