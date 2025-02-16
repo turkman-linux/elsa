@@ -4,6 +4,8 @@
 #include <libintl.h>
 #include <locale.h>
 
+#include <elsa.h>
+
 static bool language_init = false;
 
 char* get_locale_string(char* domain, char* locale, char* msg){

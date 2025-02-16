@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <iniparser.h>
-
+#include <elsa.h>
 
 #define FILE_OK 0
 #define FILE_NOT_EXIST 1

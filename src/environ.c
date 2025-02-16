@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <elsa.h>
+
 extern char **environ;
 void clear_env(){
     char *path = strdup(getenv("PATH"));
