@@ -11,4 +11,5 @@ void hello_init(){
     Module *mod = malloc(sizeof(Module));
     mod->name = "hello";
     mod->action = hello;
+    add_module(mod);
 }

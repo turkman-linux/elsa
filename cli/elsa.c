@@ -23,5 +23,5 @@ int main(int argc, char** argv){
         }
     }
     set_update_function(aaa);
-    return module_execute("main");
+    return module_execute("hello");
 }

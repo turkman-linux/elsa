@@ -11,6 +11,7 @@ static int module_cur = 0;
 static bool module_begin = false;
 
 static void module_init();
+extern void ctx_init();
 
 extern update_fn update;
 
@@ -19,7 +20,7 @@ int module_execute(char* name){
         module_init();
         module_begin = true;
     }
-    for (int i=0; i<1024; i++){
+    for (int i=0; i<module_cur; i++){
         if(strcmp(mods[i]->name, name) == 0){
             printf("Execting %s\n", name);
             mods[i]->action();
@@ -37,13 +38,11 @@ void add_module(Module *mod){
     module_cur++;
 }
 
-extern void hello_init();
 static void module_init(){
     if(!update){
         update = (update_fn) default_print;
     }
-    hello_init();
-
+    ctx_init();
 }
 #define startswith(A, B) \
     strncmp(A, B, strlen(B)) == 0

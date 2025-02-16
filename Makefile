@@ -16,12 +16,23 @@ CLI_OBJS=$(shell find example/ cli/ -type f -iname '*.c' | sed "s/\.c/.o/g")
 
 build: clean libelsa cli
 
+genctx:
+	{ for f in $(shell ls modules); do \
+	    echo "extern void $${f/.c/}_init();" ;\
+	done ;\
+	echo "void ctx_init() {" ;\
+	for f in $(shell ls modules); do \
+	    echo "$${f/.c/}_init();" ;\
+	done ;\
+	echo "}" ; }  > ./build/ctx.c ;\
+	$(CC) -o build/ctx.o -c build/ctx.c
+
 %.o: %.c
 	@install -d $(shell dirname build/$@)
 	$(CC) -c -fPIC -Iinclude $(DepCFLAGS) -o build/$@ $< -Iinclude -g3
 
-libelsa: $(ELSA_OBJS)
-	cd build ; $(CC)  $(ELSA_OBJS) $(DepLIBS) -o libelsa.so -shared -fPIC $(CFLAGS)
+libelsa: $(ELSA_OBJS) genctx
+	cd build ; $(CC)  $(ELSA_OBJS) ctx.o $(DepLIBS) -o libelsa.so -shared -fPIC $(CFLAGS)
 
 cli: libelsa $(CLI_OBJS)
 	cd build ; for cli in $(CLI_OBJS) ; do \
