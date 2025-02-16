@@ -1,9 +1,0 @@
-#!/bin/bash
-## Example configuration
-# empty
-set -e
-if [[ -f /tmp/fstab.elsa ]] ; then
-    cp -f /tmp/fstab.elsa /target/etc/fstab
-fi
-sync
-

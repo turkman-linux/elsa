@@ -11,11 +11,8 @@ void aaa(char* msg){
 int main(int argc, char** argv){
     for(int i=0;i<argc;i++){
         if(iseq(argv[i], "-c") && i<argc-1){
-             config_path = strdup(argv[i+1]);
+             set_config(argv[i+1]);
 	      }
-        if(iseq(argv[i], "-m") && i<argc-1){
-            module_path = strdup(argv[i+1]);
-        }
         if(iseq(argv[i], "-h")){
             puts("Usage: elsa <options>");
             puts("Options:");

@@ -7,10 +7,14 @@
 #endif
 
 
-typedef void (*update_fn)(char*);
-void set_update_function(update_fn up_new);
+typedef struct {
+    char* name;
+    void (*action)();
+} Module;
 
 int module_execute(char* name);
+int execute_piped(char* cmd);
+void add_module(Module *mod);
 
 extern char* module_path;
 extern char* config_path;

@@ -4,14 +4,13 @@ DESTDIR=/
 PREFIX=/usr/local
 LIBDIR=/lib
 BINDIR=/bin
-PYDIR=$(shell python3 -c "import site; print(site.getsitepackages()[0])")
 
 Deps=libxml-2.0
 
 DepCFLAGS=$(shell pkg-config --cflags $(Deps)) -Wall -Wextra -Werror
 DepLIBS=$(shell pkg-config --libs $(Deps))
 
-ELSA_OBJS=$(shell find src/ -type f -iname '*.c' | sed "s/\.c/.o/g")
+ELSA_OBJS=$(shell find src modules -type f -iname '*.c' | sed "s/\.c/.o/g")
 CLI_OBJS=$(shell find example/ cli/ -type f -iname '*.c' | sed "s/\.c/.o/g")
 
 
@@ -33,25 +32,15 @@ clean:
 	rm -rf build
 
 install: libelsa cli
-	chmod 755 modules/*
-	mkdir -p $(DESTDIR)/$(PREFIX)/$(LIBDIR)/pkgconfig
-	mkdir -p $(DESTDIR)/$(PREFIX)/include/elsa
-	mkdir -p $(DESTDIR)/$(PREFIX)/$(BINDIR)
-	mkdir -p $(DESTDIR)/$(PREFIX)/share/icons/hicolor/scalable/apps
-	mkdir -p $(DESTDIR)/lib/elsa/
-	mkdir -p $(DESTDIR)/$(PYDIR)
-	install data/pkgconfig $(DESTDIR)/$(PREFIX)/$(LIBDIR)/pkgconfig/elsa.pc
+	install -Dm644 data/pkgconfig $(DESTDIR)/$(PREFIX)/$(LIBDIR)/pkgconfig/elsa.pc
 	sed -i "s|@prefix@|$(PREFIX)|g" $(DESTDIR)/$(PREFIX)/$(LIBDIR)/pkgconfig/elsa.pc
-	install data/icon.svg $(DESTDIR)/$(PREFIX)/share/icons/hicolor/scalable/apps/elsa.svg
-	install build/libelsa.so $(DESTDIR)/$(PREFIX)/$(LIBDIR)
-	install build/elsa $(DESTDIR)/$(PREFIX)/$(BINDIR)
-	install modules/* $(DESTDIR)/lib/elsa/
-	install include/*.h $(DESTDIR)/$(PREFIX)/include/elsa/
-	install python/*.py $(DESTDIR)/$(PYDIR)/
+	install -Dm644 data/icon.svg $(DESTDIR)/$(PREFIX)/share/icons/hicolor/scalable/apps/elsa.svg
+	install -Dm755 build/libelsa.so $(DESTDIR)/$(PREFIX)/$(LIBDIR)
+	install -Dm755 build/elsa $(DESTDIR)/$(PREFIX)/$(BINDIR)
+	install -Dm755 include/*.h $(DESTDIR)/$(PREFIX)/include/elsa/
 
 install_launcher:
-	mkdir -p $(DESTDIR)/$(PREFIX)/share/applications
-	install data/application.desktop $(DESTDIR)/$(PREFIX)/share/applications/elsa.desktop
+	install -Dm755 data/application.desktop $(DESTDIR)/$(PREFIX)/share/applications/elsa.desktop
 	sed -i "s|@BINDIR@|$(PREFIX)/$(BINDIR)|g" $(DESTDIR)/$(PREFIX)/share/applications/elsa.desktop
 
 test: build
